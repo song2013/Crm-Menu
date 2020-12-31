@@ -1,0 +1,30 @@
+{
+  "name": "crm/menu",
+  "description": "Publish permission for Laravel",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "aaron.song",
+      "email": "song2013@outlook.com"
+    }
+  ],
+  "require": {
+    "php": " >=7.1.9",
+    "laravel/framework": "5.5.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Crm\\Menu\\": "src/"
+    },
+    "files": [
+      "src/helper.php"
+    ]
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Crm\\Menu\\MenuServiceProvider"
+      ]
+    }
+  }
+}
