@@ -112,7 +112,7 @@ class MenuCommand extends Command
             }
 
         }
-        DB::table($this->brandDatabase.$this->permissionVersionTable)->insert($versionLog);
+        DB::table($this->brandDatabase.'.'.$this->permissionVersionTable)->insert($versionLog);
 
     }
 
