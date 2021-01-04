@@ -71,7 +71,7 @@ class MenuCommand extends Command
      */
     public function handle()
     {
-        $version    = date('Y_m_d_H_i_s');
+        $version = date('Y_m_d_H_i_s');
         $versionLog = [];
         foreach ($this->getBrands() as $brand) {
             try {
@@ -86,33 +86,35 @@ class MenuCommand extends Command
                                     {$this->brandDatabase}.{$this->permissionTable} p
                                     INNER JOIN {$this->brandDatabase}.{$this->brandPermissionTable} b ON p.id = b.permission_id 
                                 WHERE
-                                    b.brand_id = 1 
+                                    b.brand_id = {$brand->id} 
                                 ) 
                                 ON DUPLICATE KEY UPDATE enable_status = 1;";
                 DB::statement($querySql);
                 DB::commit();
                 $versionLog[] = [
-                    'version'        => $version,
-                    'brand_id'       => $brand->id,
+                    'version' => $version,
+                    'brand_id' => $brand->id,
                     'publish_status' => 1,
-                    'created_at'     => date('Y-m-d H:i:s')
+                    'created_at' => date('Y-m-d H:i:s')
                 ];
-
+                $this->output->writeln($brand->name.' Publish is success . ');
+                
             } catch (\Exception $exception) {
                 DB::rollBack();
                 $versionLog[] = [
-                    'version'         => $version,
-                    'brand_id'        => $brand->id,
-                    'publish_status'  => 0,
+                    'version' => $version,
+                    'brand_id' => $brand->id,
+                    'publish_status' => 0,
                     'publish_message' => $exception->getMessage(),
-                    'created_at'      => date('Y-m-d H:i:s'),
+                    'created_at' => date('Y-m-d H:i:s'),
                 ];
+                $this->output->writeln($brand->name.' Publish is failed . The message:'.$exception->getMessage());
 
-                echo $exception->getMessage();
             }
 
         }
         DB::table($this->brandDatabase.'.'.$this->permissionVersionTable)->insert($versionLog);
+        $this->output->writeln('All brand menu was published .');
 
     }
 
@@ -144,11 +146,11 @@ class MenuCommand extends Command
 
     protected function setParams()
     {
-        $this->brandDatabase          = config('menu.brand_database') ?? 'crm';
-        $this->brandTable             = config('menu.brand_table') ?? 'brand';
-        $this->permissionTable        = config('menu.permission_table') ?? 'permission';
+        $this->brandDatabase = config('menu.brand_database') ?? 'crm';
+        $this->brandTable = config('menu.brand_table') ?? 'brand';
+        $this->permissionTable = config('menu.permission_table') ?? 'permission';
         $this->permissionVersionTable = config('menu.permission_version_table') ?? 'permission';
-        $this->brandPermissionTable   = config('menu.brand_permission_table') ?? 'brand_permission';
-        $this->sysPermissionTable     = config('menu.sys_permission_table') ?? 'sys_permission';
+        $this->brandPermissionTable = config('menu.brand_permission_table') ?? 'brand_permission';
+        $this->sysPermissionTable = config('menu.sys_permission_table') ?? 'sys_permission';
     }
 }
