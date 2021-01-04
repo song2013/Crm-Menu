@@ -98,7 +98,7 @@ class MenuCommand extends Command
                     'created_at' => date('Y-m-d H:i:s')
                 ];
                 $this->output->writeln($brand->name.' Publish is success . ');
-                
+
             } catch (\Exception $exception) {
                 DB::rollBack();
                 $versionLog[] = [
