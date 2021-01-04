@@ -78,7 +78,7 @@ class MenuCommand extends Command
                 set_default_database_connection($brand->crm_db_name);
                 DB::beginTransaction();
                 //TODO 删除历史或者删除关联表
-                DB::table($this->sysPermissionTable)->update(['enable_status' => 1]);
+                DB::table($this->sysPermissionTable)->update(['enable_status' => 0]);
                 $querySql = "INSERT INTO {$this->sysPermissionTable} (
                                 SELECT
                                     p.* 
